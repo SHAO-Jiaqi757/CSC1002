@@ -3,12 +3,16 @@ MIN_LEN = 4
 g_puzzle = []
 g_puzzle_t = []
 g_dictword = []
-g_dir = ['n','e','s','w']
+g_dir = ['n','e','s','w','ne','nw','se','sw']
 g_incr = {
       'n': (-1,0),
       'e': (0,1),
       's': (1,0),
-      'w': (0,-1)
+      'w': (0,-1),
+      'ne': (-1,1),
+      'se': (1,1),
+      'sw': (1,-1),
+      'nw': (-1,-1)
     }
 
 g_puzzle = [
@@ -50,23 +54,19 @@ def show_word(p_y, p_x, p_dir, p_word):
 # return the next valid location as (row,col) in 
 # the given direction and starting position, (-1,-1) otherwise
 def get_next_location(p_y, p_x, p_dir):
-    y_incr, x_incr = g_incr[p_dir]
-    try: 
-        p_y = p_y + y_incr 
-        p_x = p_x + x_incr
-        assert p_x >= 0
-        assert p_y >= 0
-        g_puzzle[p_y][p_x]
+    y_incr, x_incr = g_incr[p_dir]    
+    p_y = p_y + y_incr 
+    p_x = p_x + x_incr
+    if p_y in range(len(g_puzzle)) and p_x in range(len(g_puzzle[0])):
         return (p_y, p_x)
-    except:
-        return (-1,-1)
+    return (-1,-1)
 
 # return all locations as list of (row,col)
 # in the given direction and starting position (p_y,p_x)
 def get_all_locations(p_y, p_x, p_dir):
     
     while True: 
-        p_y, p_x = get_next_location(p_y, p_x, p_dir)
+        (p_y, p_x) = get_next_location(p_y, p_x, p_dir)
         if (p_y, p_x) == (-1, -1):
             break        
         g_puzzle_t.append((p_y, p_x))        
@@ -74,13 +74,10 @@ def get_all_locations(p_y, p_x, p_dir):
 # return all letters as a string 
 # in the given direction and starting position (p_y,p_x) 
 def get_all_letters(p_y, p_x, p_dir):
-    letters = ""
-    get_all_locations(p_y, p_x, p_dir)
-    if len(g_puzzle_t) > 0:
-        for y, x in g_puzzle_t:
-            letters += g_puzzle[y][x]            
-        return letters
-
+    
+    locs = get_all_locations(p_y, p_x, p_dir)
+    letters = [g_puzzle[y][x] for y,x in locs]
+    return "".join(letters)
 # search for hidden word in the given direction
 # at location (p_y,p_x)
 def search_word(p_y, p_x, p_dir, p_min=MIN_LEN):
