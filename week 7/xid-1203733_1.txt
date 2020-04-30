@@ -1,5 +1,0 @@
-Java has significant advantages over other languages and environments that make it suitable for just about any programming task.
-The advantages of Python are as follows:
-1. Java is easy to learn.
-2. Java was designed to be easy to use and is therefore easy to write, compile, debug, and learn than other programming languages.
-3. Java is object-oriented. This allows you to create modular programs and reusable code.
